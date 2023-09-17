@@ -1,0 +1,34 @@
+import { gql } from "apollo-server-express";
+
+const typeDefs = gql`
+  type Employee {
+    id: ID!
+    firstName: String!
+    lastName: String!
+    title: String!
+    hiredDate: String!
+    address: String!
+    contactNumber: String!
+  }
+
+  input EmployeeInput {
+    firstName: String!
+    lastName: String!
+    title: String!
+    hiredDate: String!
+    address: String!
+    contactNumber: String!
+  }
+
+  type Query {
+    employees: [Employee]!
+  }
+
+  type Mutation {
+    createEmployee(input: EmployeeInput!): Employee!
+    updateEmployee(id: ID!, input: EmployeeInput!): String!
+    deleteEmployee(id: ID!): String!
+  }
+`;
+
+export default typeDefs;

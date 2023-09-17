@@ -1,0 +1,31 @@
+version: "3"
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: dev_password
+      POSTGRES_DB: employee_list
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  graphql-server:
+    build: .
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: dev
+      DB_PASSWORD: dev_password
+      DB_NAME: employee_list
+    ports:
+      - "4000:4000"
+    volumes:
+      - .:/app
+    command: ["npm", "start"]
+volumes:
+  postgres-data:
