@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import { EmployeeData } from "./types";
 import { createEmployee } from "../api";
 import AddEmployeeModal from "./modal";
+import { useEmployeeData } from "../EmployeeDataContext";
 
-type AddEmployeeProps = {
-  setIsUpdate: React.Dispatch<React.SetStateAction<boolean>>;
-};
-const AddEmployee: React.FC<AddEmployeeProps> = ({ setIsUpdate }) => {
+const AddEmployee: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { employeeData, setEmployeeData } = useEmployeeData();
 
   const handleAddEmployee = (): void => {
     setIsModalOpen(true);
@@ -16,13 +15,15 @@ const AddEmployee: React.FC<AddEmployeeProps> = ({ setIsUpdate }) => {
   const handleModalClose = (): void => {
     setIsModalOpen(false);
   };
+  const arr = [...employeeData];
 
   const handleSaveEmployee = async (
     employeeData: EmployeeData
   ): Promise<void> => {
     try {
-      await createEmployee(employeeData);
-      setIsUpdate(true);
+      const response = await createEmployee(employeeData);
+      arr.push(response);
+      setEmployeeData(arr);
     } catch (error) {
       // Handle API error (e.g., display error message)
       alert(`Error creating employee: ${error}`);

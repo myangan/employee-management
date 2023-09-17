@@ -24,7 +24,6 @@ export const createEmployee = async (input: any) => {
       mutation: CREATE_EMPLOYEE,
       variables: { input },
     });
-
     return data.createEmployee;
   } catch (error) {
     console.error("Error creating employee:", error);
@@ -32,16 +31,16 @@ export const createEmployee = async (input: any) => {
   }
 };
 
-export const updateEmployee = async (input: any) => {
+export const updateEmployee = async (id: any, input: any) => {
   try {
     const { data } = await client.mutate({
       mutation: UPDATE_EMPLOYEE,
-      variables: { input },
+      variables: { id, input },
     });
 
     return data.updateEmployee;
   } catch (error) {
-    console.error("Error creating employee:", error);
+    console.error("Error updating employee:", error);
     throw error;
   }
 };

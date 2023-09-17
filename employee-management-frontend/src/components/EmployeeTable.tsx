@@ -1,28 +1,46 @@
 import React, { useState } from "react";
-import { Employee, EmployeeData } from "./types";
+import { Employee } from "./types";
 import UpdateEmployeeModal from "./updateModal";
 import { updateEmployee } from "../api";
+import { useEmployeeData } from "../EmployeeDataContext";
 
 type EmployeeTableProps = {
   data: Employee[];
 };
 const EmployeeTable: React.FC<EmployeeTableProps> = ({ data }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleClick = (): void => {
+  const [index, setIndex] = useState(0);
+
+  const handleClick = (i: any): void => {
+    setIndex(i);
     setIsModalOpen(true);
   };
   const handleModalClose = (): void => {
     setIsModalOpen(false);
   };
+  const { employeeData, setEmployeeData } = useEmployeeData();
 
   const handleUpdateEmployee = async (
-    employeeData: EmployeeData
+    updatedEmployeeData: Employee
   ): Promise<void> => {
     try {
-      await updateEmployee(employeeData);
+      const updateEmployeeDetails = {
+        firstName: updatedEmployeeData.firstName,
+        lastName: updatedEmployeeData.lastName,
+        title: updatedEmployeeData.title,
+        hiredDate: updatedEmployeeData.hiredDate,
+        address: updatedEmployeeData.address,
+        contactNumber: updatedEmployeeData.contactNumber,
+      };
+      await updateEmployee(updatedEmployeeData.id, updateEmployeeDetails);
+      const empData = employeeData.filter(
+        (e) => e.id !== updatedEmployeeData.id
+      );
+      empData.push(updatedEmployeeData);
+
+      setEmployeeData(empData);
     } catch (error) {
-      // Handle API error (e.g., display error message)
-      alert(`Error creating employee: ${error}`);
+      alert(`Error updating employee: ${error}`);
     }
     setIsModalOpen(false);
   };
@@ -56,7 +74,7 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({ data }) => {
       </thead>
       <tbody className="bg-white divide-y divide-gray-200">
         {data.map((employee, i) => (
-          <tr key={i} onClick={handleClick}>
+          <tr key={i} onClick={() => handleClick(i)}>
             <td className="px-6 py-4 whitespace-nowrap">{employee.id}</td>
             <td className="px-6 py-4 whitespace-nowrap">
               {employee.firstName}
@@ -70,15 +88,17 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({ data }) => {
             <td className="px-6 py-4 whitespace-nowrap">
               {employee.contactNumber}
             </td>
-            <UpdateEmployeeModal
-              isOpen={isModalOpen}
-              onRequestClose={handleModalClose}
-              onUpdate={handleUpdateEmployee}
-              data={employee}
-            />
           </tr>
         ))}
       </tbody>
+      {isModalOpen && (
+        <UpdateEmployeeModal
+          isOpen={isModalOpen}
+          onRequestClose={handleModalClose}
+          onUpdate={handleUpdateEmployee}
+          data={data[index]}
+        />
+      )}
     </table>
   );
 };

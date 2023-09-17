@@ -78,7 +78,7 @@ const resolvers: Resolvers = {
         const query = `
             UPDATE employees
             SET ${updateFields.join(", ")}
-            WHERE "id" = $1
+            WHERE "id" = $1;
           `;
 
         const result = await client.query(query, values);

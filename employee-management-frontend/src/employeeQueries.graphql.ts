@@ -16,6 +16,7 @@ const GET_EMPLOYEES = gql`
 const CREATE_EMPLOYEE = gql`
   mutation createEmployee($input: EmployeeInput!) {
     createEmployee(input: $input) {
+      id
       firstName
       lastName
       title
@@ -26,15 +27,8 @@ const CREATE_EMPLOYEE = gql`
   }
 `;
 const UPDATE_EMPLOYEE = gql`
-  mutation updateEmployee($input: EmployeeInput!) {
-    updateEmployee(input: $input) {
-      firstName
-      lastName
-      title
-      hiredDate
-      address
-      contactNumber
-    }
+  mutation updateEmployee($id: ID!, $input: EmployeeInput!) {
+    updateEmployee(id: $id, input: $input)
   }
 `;
 

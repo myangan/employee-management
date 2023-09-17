@@ -20,7 +20,7 @@ Modal.setAppElement("#root"); // Set the root element for screen reader accessib
 type updateEmployeeModalProps = {
   isOpen: boolean;
   onRequestClose: () => void;
-  onUpdate: (data: EmployeeData) => void;
+  onUpdate: (data: Employee) => void;
   data: Employee;
 };
 
@@ -40,7 +40,7 @@ const UpdateEmployeeModal: React.FC<updateEmployeeModalProps> = ({
     }));
   };
 
-  const handleSave = () => {
+  const handleUpdate = () => {
     if (
       employeeData.firstName &&
       employeeData.lastName &&
@@ -124,7 +124,7 @@ const UpdateEmployeeModal: React.FC<updateEmployeeModalProps> = ({
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             type="button"
-            onClick={handleSave}
+            onClick={handleUpdate}
           >
             Update
           </button>
