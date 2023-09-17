@@ -9,6 +9,8 @@ Frontend has build on React, Typescript,Apollo GraphQL, Tailwind CSS
 before you start you should clone the repo from
 https://github.com/myangan/employee-management.git
 
+Before starting the frontend, please make sure the backend Docker container is running to have a seamless experience.
+
 # Backend
 
 This is a GraphQL API for managing employee data. It provides CRUD (Create, Read, Update, Delete) operations for employee records.
